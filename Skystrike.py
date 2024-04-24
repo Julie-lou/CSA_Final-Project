@@ -1,8 +1,9 @@
 import pygame
+import pygame.mixer
 import time
 import random
 pygame.font.init()
-# Sizing the window
+# Setting up the window
 WIDTH, HEIGHT = 1000,  800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Sky Strike")
@@ -15,7 +16,7 @@ PLAYER_HEIGHT = 50
 PLAYER_VEL = 5
 STAR_WIDTH = 10
 STAR_HEIGHT = 10
-STAR_VEL = 3
+STAR_VEL = 7
 FONT = pygame.font.SysFont("Time News Roman", 50)
 def draw(player_image,player, elapsed_time, stars):
     WIN.blit(BG, (0,0))
@@ -47,6 +48,14 @@ def main():
     
     stars = []
     hit = False
+    
+    pygame.mixer.init()
+
+    # Load background music
+    pygame.mixer.music.load("Woodshedder - Quincas Moreira.mp3")
+
+    # Start playing background music on a loop
+    pygame.mixer.music.play(-1)
     while run:
         star_count += clock.tick(60)
         elapsed_time = time.time() - start_time
@@ -80,6 +89,7 @@ def main():
                 hit = True
                 break
         if hit:
+            pygame.mixer.music.stop() 
             lost_text = FONT.render("You lost!",2,"white")
             score = FONT.render(f"Your score: {round(elapsed_time)}s",2,"white")
             WIN.blit(lost_text, (WIDTH/2 - lost_text.get_width()/2, HEIGHT/2 - lost_text.get_height()/2))
